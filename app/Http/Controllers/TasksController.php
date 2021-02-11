@@ -32,9 +32,12 @@ class TasksController extends Controller
         }
 
         // メッセージ一覧ビューでそれを表示
-        return view('tasks.index', [
+        /*return view('tasks.index', [
             'tasks' => $tasks,
-        ]);
+        ]);*/
+        
+        // Welcomeビューでそれらを表示
+        return view('welcome', $data);
     }
 
     /**
@@ -72,14 +75,15 @@ class TasksController extends Controller
         //$task = new Task;
         //$task->status = $request->status;
         // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
-        $request->user()->microposts()->create([
-            'status' => $request->content,
+        $request->user()->tasks()->create([
+            'status' => $request->status,
+            'content' => $request->content,
         ]);
         //$task->content = $request->content;
         // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
-        $request->user()->microposts()->create([
+        /*/*$request->user()->tasks()->create([
             'content' => $request->content,
-        ]);
+        ]);*/
         //$task->save();
 
         // トップページへリダイレクトさせる
@@ -142,9 +146,16 @@ class TasksController extends Controller
         $task = Task::findOrFail($id);
         // メッセージを更新
         $task->status = $request->status;
+        // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
+        /*/*$request->user()->tasks()->update([
+            'status' => $request->status,
+            'content' => $request->content,
+        ]);*/
         $task->content = $request->content;
+        
+        
         $task->save();
-
+        
         // トップページへリダイレクトさせる
         return redirect('/');
     }
